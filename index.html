@@ -254,7 +254,7 @@ document.querySelectorAll('.letter p,.photo,#loveQ').forEach(function(el){el.cla
 var AC=null,musicOn=false,musicTimer=null,YTplayer=null,ytReady=false;
 function onYouTubeIframeAPIReady(){
 try{
-YTplayer=new YT.Player('yt-player',{videoId:'U2LJakwqmu0',playerVars:{autoplay:0,loop:1,playlist:'U2LJakwqmu0',controls:0},events:{onReady:function(){ytReady=true;}}});
+YTplayer=new YT.Player('yt-player',{videoId:'U2LJakwqmu0',playerVars:{autoplay:0,loop:1,playlist:'U2LJakwqmu0',controls:0},events:{onReady:function(){ytReady=true;if(musicOn){try{YTplayer.unMute();YTplayer.setVolume(80);YTplayer.playVideo();}catch(e){}}}}});
 }catch(e){}
 }
 function playNote(f,t,d){
@@ -271,23 +271,21 @@ seq.forEach(function(f,i){playNote(f,t+i*0.45,0.8);playNote(f/2,t+i*0.45,0.9);})
 musicTimer=setTimeout(melody,seq.length*450+800);
 }
 function startMusic(){
-if(musicOn)return;
-musicOn=true;document.getElementById('musicBtn').textContent='⏸ Pause music';
+try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
+try{AC&&AC.resume&&AC.resume();}catch(e){}
+if(!musicOn){musicOn=true;document.getElementById('musicBtn').textContent='⏸ Pause music';}
 var played=false;
 try{if(ytReady&&YTplayer&&YTplayer.playVideo){YTplayer.unMute();YTplayer.setVolume(80);YTplayer.playVideo();played=true;}}catch(e){}
-if(!played){melody();}
+if(!played&&AC){try{clearTimeout(musicTimer);melody();}catch(e){}}
 }
 function toggleMusic(){
 musicOn=!musicOn;
 document.getElementById('musicBtn').textContent=musicOn?'⏸ Pause music':'🎵 Play music';
-try{if(YTplayer&&YTplayer.pauseVideo&&YTplayer.playVideo){if(musicOn){YTplayer.playVideo();}else{YTplayer.pauseVideo();}} }catch(e){}
-if(!ytReady||!YTplayer){
-if(!AC){if(musicOn){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}melody();}return;}
-if(musicOn){AC.resume();melody();}else{AC.suspend();clearTimeout(musicTimer);}
-}else{
-if(!musicOn){try{AC&&AC.suspend();clearTimeout(musicTimer);}catch(e){}}
-else{try{AC&&AC.resume();}catch(e){}}
-}
+try{if(YTplayer&&YTplayer.pauseVideo&&YTplayer.playVideo){if(musicOn){YTplayer.unMute();YTplayer.playVideo();}else{YTplayer.pauseVideo();}} }catch(e){}
+try{
+if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();} 
+if(musicOn){AC.resume();clearTimeout(musicTimer);melody();}else{AC.suspend();clearTimeout(musicTimer);}
+}catch(e){}
 }
 </script>
 </body>
