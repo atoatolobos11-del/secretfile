@@ -191,27 +191,30 @@ body::after{content:'💗 💖 💕 🌷 ✨ 💘';position:fixed;bottom:12px;le
 <p>From: atoatolobo11@gmail.com<br>Please register first to unlock your surprise letter</p>
 <input id="gname" placeholder="Your name / nickname (ex: bebe)" autocomplete="off">
 <input id="gmail" placeholder="Your email (optional)" autocomplete="off">
-<button onclick="unlock()" style="font-size:17px;padding:16px">Unlock My Surprise ❤</button>
-<div style="margin-top:10px"><a href="#" onclick="skipGate();return false;" style="font-size:13px;color:#0b57d0">Having trouble? Tap here to open directly →</a></div>
+<button id="openBtn" type="button" onclick="unlock()" style="font-size:17px;padding:16px;width:100%;margin-top:12px;background:linear-gradient(135deg,#d81b60,#ff5a8a);color:#fff;border:0;border-radius:26px;font-weight:600;cursor:pointer">Unlock My Surprise ❤</button>
+<div style="margin-top:10px"><a href="?nogate=1" onclick="skipGate();return false;" style="font-size:13px;color:#0b57d0">Having trouble? Tap here to open directly →</a></div>
 <div class="gate-note">Made with love • stays on your device only, no password needed</div>
 </div>
 </div>
 <script>
 function unlock(){
-var n=document.getElementById('gname').value.trim();
-if(!n){n='bebe';}
+try{
+var n='bebe';
+try{var v=document.getElementById('gname').value;if(v&&v.trim())n=v.trim();}catch(e){}
 try{localStorage.setItem('surprise_name',n);}catch(e){}
 document.getElementById('gate').style.display='none';
 var el=document.getElementById('hello-bebe');
 if(el) el.textContent='Hi '+n+'! This is for you 💖';
-confetti();startMusic();
+}catch(e){try{document.getElementById('gate').style.display='none';}catch(_){}}
+try{confetti();}catch(e){}
+try{startMusic();}catch(e){}
 }
 function skipGate(){
-document.getElementById('gate').style.display='none';
-var el=document.getElementById('hello-bebe');
-if(el) el.textContent='Hi bebe! This is for you 💖';
-startMusic();
+try{document.getElementById('gate').style.display='none';}catch(e){}
+try{var el=document.getElementById('hello-bebe');if(el) el.textContent='Hi bebe! This is for you 💖';}catch(e){}
+try{startMusic();}catch(e){}
 }
+if(typeof location!=='undefined'&&location.search.indexOf('nogate')!==-1){try{document.addEventListener('DOMContentLoaded',function(){document.getElementById('gate').style.display='none';});}catch(e){}}
 try{
 var saved=localStorage.getItem('surprise_name');
 if(saved){
