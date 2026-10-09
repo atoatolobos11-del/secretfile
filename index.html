@@ -189,9 +189,11 @@ body::after{content:'💗 💖 💕 🌷 ✨ 💘';position:fixed;bottom:12px;le
 <div class="envelope">💌</div>
 <h2>You've got <span>mail</span>, bebe!</h2>
 <p>From: atoatolobo11@gmail.com<br>Please register first to unlock your surprise letter</p>
+<form id="gateForm" onsubmit="unlock();return false;">
 <input id="gname" placeholder="Your name / nickname (ex: bebe)" autocomplete="off">
 <input id="gmail" placeholder="Your email (optional)" autocomplete="off">
-<button id="openBtn" type="button" onclick="unlock()" style="font-size:17px;padding:16px;width:100%;margin-top:12px;background:linear-gradient(135deg,#d81b60,#ff5a8a);color:#fff;border:0;border-radius:26px;font-weight:600;cursor:pointer">Unlock My Surprise ❤</button>
+<button id="openBtn" type="submit" style="font-size:17px;padding:16px;width:100%;margin-top:12px;background:linear-gradient(135deg,#d81b60,#ff5a8a);color:#fff;border:0;border-radius:26px;font-weight:600;cursor:pointer">Unlock My Surprise ❤</button>
+</form>
 <div style="margin-top:10px"><a href="?nogate=1" onclick="skipGate();return false;" style="font-size:13px;color:#0b57d0">Having trouble? Tap here to open directly →</a></div>
 <div class="gate-note">Made with love • stays on your device only, no password needed</div>
 </div>
@@ -267,7 +269,7 @@ try{if(YTplayer&&YTplayer.playVideo){YTplayer.unMute();YTplayer.setVolume(80);YT
 function toggleMusic(){
 musicOn=!musicOn;
 document.getElementById('musicBtn').textContent=musicOn?'⏸ Pause music':'🎵 Play It Might Be You';
-try{if(YTplayer&&YTplayer.pauseVideo&&YTplayer.playVideo){if(musicOn){YTplayer.unMute();YTplayer.playVideo();}else{YTplayer.pauseVideo();}}catch(e){}
+try{if(YTplayer&&YTplayer.pauseVideo&&YTplayer.playVideo){if(musicOn){YTplayer.unMute();YTplayer.playVideo();}else{YTplayer.pauseVideo();}}}catch(e){}
 if(musicOn&&!ytReady){setTimeout(function(){try{YTplayer.unMute();YTplayer.playVideo();}catch(e){}},1500);}
 }
 </script>
