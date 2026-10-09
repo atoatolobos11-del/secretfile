@@ -181,7 +181,7 @@ body::after{content:'💗 💖 💕 🌷 ✨ 💘';position:fixed;bottom:12px;le
 </div>
 </div>
 </div>
-<button id="musicBtn" onclick="toggleMusic()">🎵 Play music</button>
+<button id="musicBtn" onclick="toggleMusic()">🎵 Play It Might Be You</button>
 <div id="yt-player" style="position:fixed;width:2px;height:2px;bottom:0;left:0;opacity:0.01;pointer-events:none"></div>
 <script src="https://www.youtube.com/iframe_api"></script>
 <div id="gate">
@@ -251,41 +251,21 @@ document.addEventListener('DOMContentLoaded',function(){
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}})},{threshold:0.1});
 document.querySelectorAll('.letter p,.photo,#loveQ').forEach(function(el){el.classList.add('reveal');io.observe(el);});
 });
-var AC=null,musicOn=false,musicTimer=null,YTplayer=null,ytReady=false;
+var YTplayer=null,ytReady=false,musicOn=false;
 function onYouTubeIframeAPIReady(){
 try{
 YTplayer=new YT.Player('yt-player',{videoId:'U2LJakwqmu0',playerVars:{autoplay:0,loop:1,playlist:'U2LJakwqmu0',controls:0},events:{onReady:function(){ytReady=true;if(musicOn){try{YTplayer.unMute();YTplayer.setVolume(80);YTplayer.playVideo();}catch(e){}}}}});
 }catch(e){}
 }
-function playNote(f,t,d){
-var o=AC.createOscillator(),g=AC.createGain();
-o.type='sine';o.frequency.value=f;
-g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.18,t+0.05);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
-o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+0.1);
-}
-function melody(){
-if(!musicOn)return;
-var t=AC.currentTime+0.1;
-var seq=[523.25,587.33,659.25,784,880,784,659.25,523.25,392,523.25,659.25,784,659.25,523.25,392,392];
-seq.forEach(function(f,i){playNote(f,t+i*0.45,0.8);playNote(f/2,t+i*0.45,0.9);});
-musicTimer=setTimeout(melody,seq.length*450+800);
-}
 function startMusic(){
-try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
-try{AC&&AC.resume&&AC.resume();}catch(e){}
-if(!musicOn){musicOn=true;document.getElementById('musicBtn').textContent='⏸ Pause music';}
-var played=false;
-try{if(ytReady&&YTplayer&&YTplayer.playVideo){YTplayer.unMute();YTplayer.setVolume(80);YTplayer.playVideo();played=true;}}catch(e){}
-if(!played&&AC){try{clearTimeout(musicTimer);melody();}catch(e){}}
+musicOn=true;document.getElementById('musicBtn').textContent='⏸ Pause music';
+try{if(YTplayer&&YTplayer.playVideo){YTplayer.unMute();YTplayer.setVolume(80);YTplayer.playVideo();}}catch(e){}
 }
 function toggleMusic(){
 musicOn=!musicOn;
-document.getElementById('musicBtn').textContent=musicOn?'⏸ Pause music':'🎵 Play music';
-try{if(YTplayer&&YTplayer.pauseVideo&&YTplayer.playVideo){if(musicOn){YTplayer.unMute();YTplayer.playVideo();}else{YTplayer.pauseVideo();}} }catch(e){}
-try{
-if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();} 
-if(musicOn){AC.resume();clearTimeout(musicTimer);melody();}else{AC.suspend();clearTimeout(musicTimer);}
-}catch(e){}
+document.getElementById('musicBtn').textContent=musicOn?'⏸ Pause music':'🎵 Play It Might Be You';
+try{if(YTplayer&&YTplayer.pauseVideo&&YTplayer.playVideo){if(musicOn){YTplayer.unMute();YTplayer.playVideo();}else{YTplayer.pauseVideo();}}catch(e){}
+if(musicOn&&!ytReady){setTimeout(function(){try{YTplayer.unMute();YTplayer.playVideo();}catch(e){}},1500);}
 }
 </script>
 </body>
