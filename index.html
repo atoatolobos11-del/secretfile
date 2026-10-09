@@ -22,7 +22,19 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .email-wrap{flex:1;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 40px rgba(216,27,96,.12);border:1px solid #fbe3eb;min-height:80vh}
 .banner{background:linear-gradient(135deg,#d81b60 0%,#ff6f9c 50%,#ffb199 100%);color:#fff;padding:36px 32px 28px;text-align:center;position:relative;overflow:hidden}
 .banner::before{content:'❤ ❤ ❤ ❤ ❤ ❤ ❤';position:absolute;top:10px;left:0;right:0;opacity:.25;font-size:22px;letter-spacing:12px}
-.banner h1{font-family:Georgia,serif;font-size:32px;line-height:1.2;margin-bottom:8px}
+.banner h1{font-family:Georgia,serif;font-size:32px;line-height:1.2;margin-bottom:8px;animation:beat 2s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}10%{transform:scale(1.03)}20%{transform:scale(1)}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.show{opacity:1;transform:none}
+.photo{transition:transform .3s ease,box-shadow .3s ease}
+.photo:hover{transform:rotate(0) scale(1.02);box-shadow:0 12px 36px rgba(216,27,96,.25)}
+#loveQ{background:linear-gradient(135deg,#fff0f4,#fff8e8);border:1px solid #f3c6d3;border-radius:20px;padding:28px 22px;text-align:center;margin:26px auto;max-width:560px;box-shadow:0 8px 28px rgba(216,27,96,.15)}
+#loveQ h3{font-family:Georgia,serif;font-size:22px;color:#7a0f35;margin-bottom:8px}
+#loveQ p{color:#7a5a68;font-size:14px;margin-bottom:16px}
+.qbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;min-height:56px}
+#yesBtn{background:linear-gradient(135deg,#d81b60,#ff5a8a);color:#fff;border:0;border-radius:26px;padding:14px 30px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(216,27,96,.4)}
+#noBtn{background:#fff;color:#888;border:1.5px solid #ddd;border-radius:26px;padding:14px 26px;font-size:15px;cursor:pointer;transition:.2s}
+#loveA{display:none;margin-top:16px;font-family:Georgia,serif;font-size:18px;color:#d81b60}
 .banner p{opacity:.92;font-size:14px}
 .hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .hearts span{position:absolute;bottom:-20px;animation:float 6s infinite ease-in;font-size:18px;opacity:.7}
@@ -134,6 +146,16 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 <p style="font-family:Georgia,serif;font-style:italic;text-align:right">Yours always,<br>your pasaway na bebe.</p>
 </div>
 
+<div id="loveQ" class="reveal">
+<h3>One last question, bebe… 💍</h3>
+<p>Will you let me love you for many more monthsaries to come?</p>
+<div class="qbtns">
+<button id="yesBtn" onclick="sayYes()">Yes, always! 💖</button>
+<button id="noBtn" onmouseover="dodge()" ontouchstart="dodge()" onclick="dodge()">No</button>
+</div>
+<div id="loveA">Yay! I love you so much! 💖💖💖<br>Happy 4th Monthsary! See you on the 13th! 🌷</div>
+</div>
+
 <div class="attach-section">
 <div class="attach-label">1 ATTACHMENT</div>
 <div class="attach-box">
@@ -188,18 +210,35 @@ if(el2) el2.textContent='Hi '+saved+'! This is for you 💖';
 }
 }catch(e){}
 function confetti(){
-for(var i=0;i<30;i++){
+for(var i=0;i<80;i++){
 var s=document.createElement('div');
-s.textContent=['💖','💗','💕','❤️','💘'][Math.floor(Math.random()*5)];
+s.textContent=['💖','💗','💕','❤️','💘','🌷','✨'][Math.floor(Math.random()*7)];
 s.style.position='fixed';s.style.left=Math.random()*100+'vw';s.style.top='-30px';
-s.style.fontSize=(16+Math.random()*20)+'px';s.style.zIndex=200; s.style.pointerEvents='none';
+s.style.fontSize=(14+Math.random()*26)+'px';s.style.zIndex=200; s.style.pointerEvents='none';
 document.body.appendChild(s);
 (function(el){
-var top=-30;
-var t=setInterval(function(){top+=3;el.style.top=top+'px';if(top>window.innerHeight){clearInterval(t);el.remove();}},30);
+var top=-30;var drift=(Math.random()-0.5)*2;
+var left=parseFloat(el.style.left);
+var t=setInterval(function(){top+=4;left+=drift;el.style.top=top+'px';el.style.left=left+'vw';if(top>window.innerHeight){clearInterval(t);el.remove();}},30);
 })(s);
 }
 }
+function sayYes(){
+document.getElementById('loveA').style.display='block';
+document.getElementById('yesBtn').textContent='Loved! 💖';
+confetti();setTimeout(confetti,600);
+}
+function dodge(){
+var b=document.getElementById('noBtn');
+b.style.position='relative';
+b.style.left=(Math.random()*120-60)+'px';
+b.style.top=(Math.random()*60-30)+'px';
+b.textContent=['No? 🥺','Sure?','Really?','Think again!','No is broken 😝'][Math.floor(Math.random()*5)];
+}
+document.addEventListener('DOMContentLoaded',function(){
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}})},{threshold:0.1});
+document.querySelectorAll('.letter p,.photo,#loveQ').forEach(function(el){el.classList.add('reveal');io.observe(el);});
+});
 </script>
 </body>
 </html>
